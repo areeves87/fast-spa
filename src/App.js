@@ -1,13 +1,19 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import { Router, Route, Switch } from 'react-router-dom';
+import { history } from './history';
+import { configureStore } from './store';
 import './App.css';
-import Header from './components/Header';
+import Dashboard from './pages/Dashboard';
 
-function App() {
-  return (
-    <div className="App">
-      <Header />
-    </div>
-  );
-}
+const App = () => (
+  <Provider store={configureStore()}>
+    <Router history={history}>
+      <Switch>
+        <Route path="/" component={Dashboard} />
+      </Switch>
+    </Router>
+  </Provider>
+);
 
 export default App;
