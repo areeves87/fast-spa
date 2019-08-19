@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-
+import { Link } from 'react-router-dom';
 class Header extends Component {
   render() {
     return (
-      <nav className="navbar navbar-dark bg-dark">
-        <a className="navbar-brand">Fast SPA</a>
+      <nav className="navbar navbar-dark ">
+        <Link to="/" className="navbar-brand">
+          Fast SPA
+        </Link>
         <form className="form-inline">
           <input
             className="form-control mr-sm-2"

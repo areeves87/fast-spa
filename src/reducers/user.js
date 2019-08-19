@@ -11,7 +11,7 @@ export default handleActions(
       return {
         ...state,
         loading: true,
-        user
+        user,
       };
     },
   },
