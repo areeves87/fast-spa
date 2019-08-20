@@ -2,10 +2,10 @@
  * App Reducers
  */
 import { combineReducers } from 'redux';
-import user from './user';
+import apiInterface from './apiInterface';
 
 const reducers = combineReducers({
-  user,
+  apiInterface,
 });
 
 export default reducers;

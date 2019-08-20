@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import NonePanel from './NonePanel';
-import FormDataPanel from './FormDataPanel';
-import RawPanel from './RawPanel';
-import UrlEncodedPanel from './UrlEncodedPanel';
-import BinaryPanel from './BinaryPanel';
+import FormDataPanelContainer from './FormDataPanelContainer';
+import RawPanelContainer from './RawPanelContainer';
+import UrlEncodedPanelContainer from './UrlEncodedPanelContainer';
+// import BinaryPanel from './BinaryPanel';
 
 class BodyPanel extends Component {
-  state = { selectedType: 'none' };
-
   selectTypeHandler = e => {
-    this.setState({ selectedType: e.target.id });
+    this.props.setBodyType(e.target.id);
   };
 
   render() {
@@ -22,7 +20,7 @@ class BodyPanel extends Component {
               className="mx-1"
               name="options"
               id="none"
-              checked={this.state.selectedType === 'none'}
+              checked={this.props.apiInterface.body.type === 'none'}
               onChange={e => this.selectTypeHandler(e)}
             />
             none
@@ -33,7 +31,7 @@ class BodyPanel extends Component {
               className="mx-1"
               name="options"
               id="form-data"
-              checked={this.state.selectedType === 'form-data'}
+              checked={this.props.apiInterface.body.type === 'form-data'}
               onChange={e => this.selectTypeHandler(e)}
             />
             form-data
@@ -44,7 +42,9 @@ class BodyPanel extends Component {
               className="mx-1"
               name="options"
               id="x-www-form-urlencoded"
-              checked={this.state.selectedType === 'x-www-form-urlencoded'}
+              checked={
+                this.props.apiInterface.body.type === 'x-www-form-urlencoded'
+              }
               onChange={e => this.selectTypeHandler(e)}
             />
             x-www-form-urlencoded
@@ -55,33 +55,41 @@ class BodyPanel extends Component {
               className="mx-1"
               name="options"
               id="raw"
-              checked={this.state.selectedType === 'raw'}
+              checked={this.props.apiInterface.body.type === 'raw'}
               onChange={e => this.selectTypeHandler(e)}
             />
             raw
           </label>
-          <label className="mx-1">
+          {/* <label className="mx-1">
             <input
               type="radio"
               className="mx-1"
               name="options"
               id="binary"
-              checked={this.state.selectedType === 'binary'}
+              checked={this.props.apiInterface.body.type === 'binary'}
               onChange={e => this.selectTypeHandler(e)}
             />
             binary
-          </label>
+          </label> */}
         </div>
         <hr />
-        {this.state.selectedType === 'none' ? <NonePanel /> : ''}
-        {this.state.selectedType === 'form-data' ? <FormDataPanel /> : ''}
-        {this.state.selectedType === 'x-www-form-urlencoded' ? (
-          <UrlEncodedPanel />
+        {this.props.apiInterface.body.type === 'none' ? <NonePanel /> : ''}
+        {this.props.apiInterface.body.type === 'form-data' ? (
+          <FormDataPanelContainer />
         ) : (
           ''
         )}
-        {this.state.selectedType === 'raw' ? <RawPanel /> : ''}
-        {this.state.selectedType === 'binary' ? <BinaryPanel /> : ''}
+        {this.props.apiInterface.body.type === 'x-www-form-urlencoded' ? (
+          <UrlEncodedPanelContainer />
+        ) : (
+          ''
+        )}
+        {this.props.apiInterface.body.type === 'raw' ? (
+          <RawPanelContainer />
+        ) : (
+          ''
+        )}
+        {/* {this.props.apiInterface.body.type === 'binary' ? <BinaryPanel /> : ''} */}
         <br />
       </div>
     );

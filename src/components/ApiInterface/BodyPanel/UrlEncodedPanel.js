@@ -11,53 +11,37 @@ const columns = [
   { key: 'description', name: 'DESCRIPTION', editable: true },
 ].map(c => ({ ...c, ...defaultColumnProperties }));
 
-const rows = [{ key: '', value: '', description: '' }];
-
 class UrlEncodedPanel extends Component {
-  state = { rows, rowCount: 1, selectedIndexes: [] };
-
   onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
-    this.setState(preState => {
-      const rows = preState.rows.slice();
-      for (let i = fromRow; i <= toRow; i++) {
-        rows[i] = { ...rows[i], ...updated };
-      }
-
-      //increase row count
-      let rowCount = preState.rowCount;
-      if (fromRow === preState.rowCount - 1) {
-        rowCount++;
-        rows[fromRow + 1] = { key: '', value: '', description: '' };
-      }
-
-      return { rows, rowCount };
-    });
+    this.props.updateUrlEncoded(fromRow, toRow, updated);
   };
 
   onRowsSelected = rows => {
-    this.setState({
-      selectedIndexes: this.state.selectedIndexes.concat(
-        rows.map(r => r.rowIdx)
-      ),
-    });
+    const selectedIndexes = this.props.apiInterface.body.urlencoded.selectedIndexes.concat(
+      rows.map(r => r.rowIdx)
+    );
+
+    this.props.setUrlEncodedRowsSelected(selectedIndexes);
   };
 
   onRowsDeselected = rows => {
     const rowIndexes = rows.map(r => r.rowIdx);
-    this.setState({
-      selectedIndexes: this.state.selectedIndexes.filter(
-        i => rowIndexes.indexOf(i) === -1
-      ),
-    });
+
+    const selectedIndexes = this.props.apiInterface.body.urlencoded.selectedIndexes.filter(
+      i => rowIndexes.indexOf(i) === -1
+    );
+    this.props.setUrlEncodedRowsSelected(selectedIndexes);
   };
 
   render() {
+    const { urlencoded } = this.props.apiInterface.body;
+
     return (
       <div>
         <ReactDataGrid
           columns={columns}
-          rowGetter={i => this.state.rows[i]}
-          rowsCount={this.state.rowCount}
+          rowGetter={i => urlencoded.rows[i]}
+          rowsCount={urlencoded.rowCount}
           onGridRowsUpdated={this.onGridRowsUpdated}
           enableCellSelect={true}
           rowSelection={{
@@ -66,7 +50,7 @@ class UrlEncodedPanel extends Component {
             onRowsSelected: this.onRowsSelected,
             onRowsDeselected: this.onRowsDeselected,
             selectBy: {
-              indexes: this.state.selectedIndexes,
+              indexes: urlencoded.selectedIndexes,
             },
           }}
         />

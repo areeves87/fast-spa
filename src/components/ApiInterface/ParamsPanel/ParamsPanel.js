@@ -11,53 +11,37 @@ const columns = [
   { key: 'description', name: 'DESCRIPTION', editable: true },
 ].map(c => ({ ...c, ...defaultColumnProperties }));
 
-const rows = [{ key: '', value: '', description: '' }];
-
-class Params extends Component {
-  state = { rows, rowCount: 1, selectedIndexes: [] };
-
+class ParamsPanel extends Component {
   onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
-    this.setState(preState => {
-      const rows = preState.rows.slice();
-      for (let i = fromRow; i <= toRow; i++) {
-        rows[i] = { ...rows[i], ...updated };
-      }
-
-      //increase row count
-      let rowCount = preState.rowCount;
-      if (fromRow === preState.rowCount - 1) {
-        rowCount++;
-        rows[fromRow + 1] = { key: '', value: '', description: '' };
-      }
-
-      return { rows, rowCount };
-    });
+    this.props.updateParams(fromRow, toRow, updated);
   };
 
   onRowsSelected = rows => {
-    this.setState({
-      selectedIndexes: this.state.selectedIndexes.concat(
-        rows.map(r => r.rowIdx)
-      ),
-    });
+    const selectedIndexes = this.props.apiInterface.params.selectedIndexes.concat(
+      rows.map(r => r.rowIdx)
+    );
+
+    this.props.setRowsSelected(selectedIndexes);
   };
 
   onRowsDeselected = rows => {
     const rowIndexes = rows.map(r => r.rowIdx);
-    this.setState({
-      selectedIndexes: this.state.selectedIndexes.filter(
-        i => rowIndexes.indexOf(i) === -1
-      ),
-    });
+
+    const selectedIndexes = this.props.apiInterface.params.selectedIndexes.filter(
+      i => rowIndexes.indexOf(i) === -1
+    );
+    this.props.setRowsSelected(selectedIndexes);
   };
 
   render() {
+    const { params } = this.props.apiInterface;
+
     return (
       <div>
         <ReactDataGrid
           columns={columns}
-          rowGetter={i => this.state.rows[i]}
-          rowsCount={this.state.rowCount}
+          rowGetter={i => params.rows[i]}
+          rowsCount={params.rowCount}
           onGridRowsUpdated={this.onGridRowsUpdated}
           enableCellSelect={true}
           rowSelection={{
@@ -66,7 +50,7 @@ class Params extends Component {
             onRowsSelected: this.onRowsSelected,
             onRowsDeselected: this.onRowsDeselected,
             selectBy: {
-              indexes: this.state.selectedIndexes,
+              indexes: params.selectedIndexes,
             },
           }}
         />
@@ -76,4 +60,4 @@ class Params extends Component {
   }
 }
 
-export default Params;
+export default ParamsPanel;

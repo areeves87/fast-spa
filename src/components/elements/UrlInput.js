@@ -6,10 +6,12 @@ class UrlInput extends Component {
     selectedMethod: 'GET',
   };
   selectedMethodHandler = (eventKey, e) => {
-    this.setState({ selectedMethod: eventKey });
+    this.props.updateMethod(eventKey);
   };
 
-  sendHandler = e => {};
+  sendHandler = e => {
+    this.props.sendRequest();
+  };
   render() {
     return (
       <div className="input-group mb-3">
@@ -18,7 +20,7 @@ class UrlInput extends Component {
             onSelect={(eventKey, e) => this.selectedMethodHandler(eventKey, e)}
           >
             <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-              {this.state.selectedMethod}
+              {this.props.apiInterface.method}
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
@@ -34,6 +36,8 @@ class UrlInput extends Component {
           type="text"
           className="form-control"
           aria-label="Text input with dropdown button"
+          value={this.props.urlAddress}
+          onChange={e => this.props.setUrlAddress(e.target.value)}
         />
         <div className="input-group-append">
           <button

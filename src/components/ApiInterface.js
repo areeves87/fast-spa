@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-import UrlInput from './elements/UrlInput';
+import UrlInputContainer from './elements/UrlInputContainer';
 import ApiTabs from './ApiInterface/ApiTabs';
+import ResponseContainer from './ApiInterface/ResponseContainer';
 
 class ApiInterface extends Component {
   render() {
     return (
       <div className="pt-3">
-        <UrlInput />
+        <UrlInputContainer />
         <hr />
         <ApiTabs />
+        <hr />
+        <ResponseContainer />
       </div>
     );
   }

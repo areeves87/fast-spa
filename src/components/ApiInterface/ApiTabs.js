@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
-import ParamsPanel from './ParamsPanel';
-import HeadersPanel from './HeadersPanel';
-import BodyPanel from './BodyPanel/';
+import ParamsPanelContainer from './ParamsPanel/ParamsPanelContainer';
+import HeadersPanelContainer from './HeadersPanel/HeadersPanelContainer';
+import BodyPanelContainer from './BodyPanel/BodyPanelContainer';
 
 class ApiTabs extends Component {
   state = {
-    selectedTab: 2,
+    selectedTab: 1,
   };
   handleSelect = selectedTab => {
     this.setState({ selectedTab });
@@ -17,16 +17,16 @@ class ApiTabs extends Component {
     return (
       <Tabs activeKey={this.state.selectedTab} onSelect={this.handleSelect}>
         <Tab eventKey={1} title="Params">
-          <ParamsPanel />
+          <ParamsPanelContainer />
         </Tab>
         <Tab eventKey={2} title="Authorization">
           Authorization
         </Tab>
         <Tab eventKey={3} title="Headers">
-          <HeadersPanel />
+          <HeadersPanelContainer />
         </Tab>
         <Tab eventKey={4} title="Body">
-          <BodyPanel />
+          <BodyPanelContainer />
         </Tab>
       </Tabs>
     );

@@ -5,60 +5,43 @@ const defaultColumnProperties = {
   resizable: true,
   width: 320,
 };
-
 const columns = [
   { key: 'key', name: 'KEY', editable: true },
   { key: 'value', name: 'VALUE', editable: true },
   { key: 'description', name: 'DESCRIPTION', editable: true },
 ].map(c => ({ ...c, ...defaultColumnProperties }));
 
-const rows = [{ key: '', value: '', description: '' }];
-
-class Headers extends Component {
-  state = { rows, rowCount: 1, selectedIndexes: [] };
-
+class HeadersPanel extends Component {
   onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
-    this.setState(preState => {
-      const rows = preState.rows.slice();
-      for (let i = fromRow; i <= toRow; i++) {
-        rows[i] = { ...rows[i], ...updated };
-      }
-
-      //increase row count
-      let rowCount = preState.rowCount;
-      if (fromRow === preState.rowCount - 1) {
-        rowCount++;
-        rows[fromRow + 1] = { key: '', value: '', description: '' };
-      }
-
-      return { rows, rowCount };
-    });
+    this.props.updateHeaders(fromRow, toRow, updated);
   };
 
   onRowsSelected = rows => {
-    this.setState({
-      selectedIndexes: this.state.selectedIndexes.concat(
-        rows.map(r => r.rowIdx)
-      ),
-    });
+    const selectedIndexes = this.props.apiInterface.headers.selectedIndexes.concat(
+      rows.map(r => r.rowIdx)
+    );
+
+    this.props.setHeadersRowsSelected(selectedIndexes);
   };
 
   onRowsDeselected = rows => {
     const rowIndexes = rows.map(r => r.rowIdx);
-    this.setState({
-      selectedIndexes: this.state.selectedIndexes.filter(
-        i => rowIndexes.indexOf(i) === -1
-      ),
-    });
+
+    const selectedIndexes = this.props.apiInterface.headers.selectedIndexes.filter(
+      i => rowIndexes.indexOf(i) === -1
+    );
+    this.props.setHeadersRowsSelected(selectedIndexes);
   };
 
   render() {
+    const { headers } = this.props.apiInterface;
+
     return (
       <div>
         <ReactDataGrid
           columns={columns}
-          rowGetter={i => this.state.rows[i]}
-          rowsCount={this.state.rowCount}
+          rowGetter={i => headers.rows[i]}
+          rowsCount={headers.rowCount}
           onGridRowsUpdated={this.onGridRowsUpdated}
           enableCellSelect={true}
           rowSelection={{
@@ -67,7 +50,7 @@ class Headers extends Component {
             onRowsSelected: this.onRowsSelected,
             onRowsDeselected: this.onRowsDeselected,
             selectBy: {
-              indexes: this.state.selectedIndexes,
+              indexes: headers.selectedIndexes,
             },
           }}
         />
@@ -77,4 +60,4 @@ class Headers extends Component {
   }
 }
 
-export default Headers;
+export default HeadersPanel;
