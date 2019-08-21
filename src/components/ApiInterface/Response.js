@@ -18,66 +18,72 @@ class Response extends Component {
     return (
       <div>
         <div className="d-flex">
-          <div>
+          <div className="d-flex mr-2">
             Status:
-            {this.props.apiInterface.response.code === 200 ? (
+            {this.props.apiInterface.response.status === 200 ? (
               <p className="text-success">
-                {this.props.apiInterface.response.code}
+                {this.props.apiInterface.response.status}
               </p>
             ) : (
               ''
             )}
-            {this.props.apiInterface.response.code === 300 ? (
+            {this.props.apiInterface.response.status === 300 ? (
               <p className="text-warning">
-                {this.props.apiInterface.response.code}
+                {this.props.apiInterface.response.status}
               </p>
             ) : (
               ''
             )}
-            {this.props.apiInterface.response.code === 400 ? (
+            {this.props.apiInterface.response.status === 400 ? (
               <p className="text-danger">
-                {this.props.apiInterface.response.code}
+                {this.props.apiInterface.response.status}
               </p>
             ) : (
               ''
             )}
-            {this.props.apiInterface.response.code === 500 ? (
+            {this.props.apiInterface.response.status === 500 ? (
               <p className="text-dark">
-                {this.props.apiInterface.response.code}
+                {this.props.apiInterface.response.status}
               </p>
             ) : (
               ''
             )}
+            {this.props.apiInterface.response.statusText}
           </div>
-          <div>
+          <div className="d-flex mr-2">
             Time:
-            {this.props.apiInterface.response.code}
-          </div>
-          <div>
-            Size:
-            {this.props.apiInterface.response.code}
+            <p className="text-success">
+              {this.props.apiInterface.response.duration}ms
+            </p>
           </div>
         </div>
-        <AceEditor
-          placeholder="Placeholder Text"
-          mode="json"
-          theme="github"
-          name="blah2"
-          onLoad={this.onLoad}
-          onChange={this.onChange}
-          fontSize={14}
-          showPrintMargin={true}
-          showGutter={true}
-          highlightActiveLine={true}
-          value={this.props.apiInterface.response.data}
-          setOptions={{
-            enableBasicAutocompletion: false,
-            enableLiveAutocompletion: false,
-            enableSnippets: false,
-            showLineNumbers: true,
-            tabSize: 2,
-          }}
-        />
+        <div className="">
+          <AceEditor
+            placeholder="Placeholder Text"
+            mode="json"
+            theme="github"
+            name="blah2"
+            style={{ height: '300px', width: '100%' }}
+            onLoad={this.onLoad}
+            onChange={this.onChange}
+            fontSize={14}
+            showPrintMargin={true}
+            showGutter={true}
+            highlightActiveLine={true}
+            value={JSON.stringify(
+              this.props.apiInterface.response.data,
+              undefined,
+              4
+            )}
+            setOptions={{
+              enableBasicAutocompletion: false,
+              enableLiveAutocompletion: false,
+              enableSnippets: false,
+              showLineNumbers: true,
+              tabSize: 2,
+            }}
+          />
+        </div>
       </div>
     );
   }

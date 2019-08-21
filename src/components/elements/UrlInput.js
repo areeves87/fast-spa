@@ -27,7 +27,6 @@ class UrlInput extends Component {
               <Dropdown.Item eventKey="GET">GET</Dropdown.Item>
               <Dropdown.Item eventKey="POST">POST</Dropdown.Item>
               <Dropdown.Item eventKey="PUT">PUT</Dropdown.Item>
-              <Dropdown.Item eventKey="PATCH">PATCH</Dropdown.Item>
               <Dropdown.Item eventKey="DELETE">DELETE</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

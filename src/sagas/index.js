@@ -4,8 +4,8 @@
 import { all } from 'redux-saga/effects';
 
 // sagas
-import authSagas from './Auth';
+import apiInterfaceSagas from './ApiInterface';
 
-export default function* rootSaga(getState) {
-  yield all([authSagas()]);
+export default function* rootSaga() {
+  yield all([apiInterfaceSagas()]);
 }

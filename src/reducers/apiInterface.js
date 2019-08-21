@@ -30,13 +30,40 @@ const defaultState = {
     binary: null,
   },
   response: {
-    code: 200,
+    code: '',
     data: '',
   },
 };
 
 export default handleActions(
   {
+    SEND_REQUEST: state => {
+      return {
+        ...state,
+        loading: true,
+        response:{
+          code: '',
+          data: '',
+        },
+      }
+    },
+
+    API_RESPONSE_SUCCESS: (state, { payload: { apiResponse } }) => {
+      return {
+        ...state,
+        loading: false,
+        response: apiResponse,
+      };
+    },
+
+    API_RESPONSE_FAIL: (state, { payload: { error } }) => {
+      return {
+        ...state,
+        loading: false,
+        response: error,
+      };
+    },
+
     UPDATE_METHOD: (state, { payload: method }) => {
       return {
         ...state,
@@ -86,6 +113,7 @@ export default handleActions(
       if (fromRow === params.rowCount - 1) {
         rowCount++;
         rows[fromRow + 1] = { key: '', value: '', description: '' };
+        params.selectedIndexes.push(fromRow)
       }
 
       params.rows = rows;
@@ -121,6 +149,7 @@ export default handleActions(
       if (fromRow === headers.rowCount - 1) {
         rowCount++;
         rows[fromRow + 1] = { key: '', value: '', description: '' };
+        headers.selectedIndexes.push(fromRow);
       }
 
       headers.rows = rows;
@@ -157,6 +186,7 @@ export default handleActions(
       if (fromRow === body.formdata.rowCount - 1) {
         rowCount++;
         rows[fromRow + 1] = { key: '', value: '', description: '' };
+        body.formdata.selectedIndexes.push(fromRow);
       }
 
       body.formdata.rows = rows;
@@ -192,6 +222,7 @@ export default handleActions(
       if (fromRow === body.urlencoded.rowCount - 1) {
         rowCount++;
         rows[fromRow + 1] = { key: '', value: '', description: '' };
+        body.urlencoded.selectedIndexes.push(fromRow);
       }
 
       body.urlencoded.rows = rows;
