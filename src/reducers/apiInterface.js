@@ -1,30 +1,32 @@
 import { handleActions } from 'redux-actions';
 
 const defaultState = {
-  method: 'GET',
-  urlAddress: '',
+  method: 'POST',
+  urlAddress: 'https://reqres.in/api/login',
   loading: false,
   params: {
-    rows: [{ key: '', value: '', description: '' }],
+    rows: [{ key: 'page', value: '20', description: '' }],
     rowCount: 1,
-    selectedIndexes: [],
+    selectedIndexes: [0],
   },
   headers: {
-    rows: [{ key: '', value: '', description: '' }],
+    rows: [{ key: 'Content-Type', value: 'application/x-www-form-urlencoded', description: '' }],
     rowCount: 1,
-    selectedIndexes: [],
+    selectedIndexes: [0],
   },
   body: {
-    type: 'none',
-    formdata: {
-      rows: [{ key: '', value: '', description: '' }],
-      rowCount: 1,
-      selectedIndexes: [],
+    type: 'x-www-form-urlencoded',
+    formdata: {///"email": "eve.holt@reqres.in",
+      rows: [{ key: 'email', value: 'eve.holt@reqres.in', description: '' },
+      { key: 'password', value: 'cityslicka', description: '' }],
+      rowCount: 2,
+      selectedIndexes: [0, 1],
     },
     urlencoded: {
-      rows: [{ key: '', value: '', description: '' }],
-      rowCount: 1,
-      selectedIndexes: [],
+      rows: [{ key: 'email', value: 'eve.holt@reqres.in', description: '' },
+      { key: 'password', value: 'cityslicka', description: '' }],
+      rowCount: 2,
+      selectedIndexes: [0, 1],
     },
     raw: '',
     binary: null,
@@ -91,8 +93,9 @@ export default handleActions(
     },
 
     SET_PARAMS_ROWS_SELECTED: (state, { payload: selectedIndexes }) => {
+      let unique = [...new Set(selectedIndexes)];
       const params = state.params;
-      params.selectedIndexes = selectedIndexes;
+      params.selectedIndexes = unique;
       return {
         ...state,
         loading: false,
@@ -127,8 +130,9 @@ export default handleActions(
     },
 
     SET_HEADERS_ROWS_SELECTED: (state, { payload: selectedIndexes }) => {
+      let unique = [...new Set(selectedIndexes)];
       const headers = state.headers;
-      headers.selectedIndexes = selectedIndexes;
+      headers.selectedIndexes = unique;
       return {
         ...state,
         loading: false,
@@ -164,8 +168,9 @@ export default handleActions(
 
     //////////////////////
     SET_FORMDATA_ROWS_SELECTED: (state, { payload: selectedIndexes }) => {
+      let unique = [...new Set(selectedIndexes)];
       const body = state.body;
-      body.formdata.selectedIndexes = selectedIndexes;
+      body.formdata.selectedIndexes = unique;
       return {
         ...state,
         loading: false,
@@ -200,8 +205,9 @@ export default handleActions(
     },
     //////////////////////
     SET_URLENCODED_ROWS_SELECTED: (state, { payload: selectedIndexes }) => {
+      let unique = [...new Set(selectedIndexes)];
       const body = state.body;
-      body.urlencoded.selectedIndexes = selectedIndexes;
+      body.urlencoded.selectedIndexes = unique;
       return {
         ...state,
         loading: false,
@@ -228,6 +234,17 @@ export default handleActions(
       body.urlencoded.rows = rows;
       body.urlencoded.rowCount = rowCount;
 
+      return {
+        ...state,
+        loading: false,
+        body,
+      };
+    },
+
+    ////////////////
+    UPDATE_RAWBODY: (state, { payload: data }) => {
+      const body = state.body;
+      body.raw = data;
       return {
         ...state,
         loading: false,

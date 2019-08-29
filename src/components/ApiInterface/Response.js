@@ -20,35 +20,41 @@ class Response extends Component {
         <div className="d-flex">
           <div className="d-flex mr-2">
             Status:
-            {this.props.apiInterface.response.status === 200 ? (
+            {this.props.apiInterface.response.status >= 200 && this.props.apiInterface.response.status < 300 ? (
               <p className="text-success">
                 {this.props.apiInterface.response.status}
               </p>
             ) : (
               ''
             )}
-            {this.props.apiInterface.response.status === 300 ? (
+            {this.props.apiInterface.response.status >= 300 && this.props.apiInterface.response.status < 400 ? (
               <p className="text-warning">
                 {this.props.apiInterface.response.status}
               </p>
             ) : (
               ''
             )}
-            {this.props.apiInterface.response.status === 400 ? (
+            {this.props.apiInterface.response.status >= 400 && this.props.apiInterface.response.status < 500 ? (
               <p className="text-danger">
                 {this.props.apiInterface.response.status}
               </p>
             ) : (
               ''
             )}
-            {this.props.apiInterface.response.status === 500 ? (
+            {this.props.apiInterface.response.status >= 500 ? (
               <p className="text-dark">
                 {this.props.apiInterface.response.status}
               </p>
             ) : (
               ''
             )}
-            {this.props.apiInterface.response.statusText}
+
+            {this.props.apiInterface.response.status ? (
+              <>&nbsp;({this.props.apiInterface.response.statusText})</>
+            ) : (
+              ''
+            )}
+            
           </div>
           <div className="d-flex mr-2">
             Time:

@@ -35,7 +35,7 @@ class UrlInput extends Component {
           type="text"
           className="form-control"
           aria-label="Text input with dropdown button"
-          value={this.props.urlAddress}
+          value={this.props.apiInterface.urlAddress}
           onChange={e => this.props.setUrlAddress(e.target.value)}
         />
         <div className="input-group-append">

@@ -3,7 +3,6 @@ import NonePanel from './NonePanel';
 import FormDataPanelContainer from './FormDataPanelContainer';
 import RawPanelContainer from './RawPanelContainer';
 import UrlEncodedPanelContainer from './UrlEncodedPanelContainer';
-// import BinaryPanel from './BinaryPanel';
 
 class BodyPanel extends Component {
   selectTypeHandler = e => {
@@ -60,17 +59,6 @@ class BodyPanel extends Component {
             />
             raw
           </label>
-          {/* <label className="mx-1">
-            <input
-              type="radio"
-              className="mx-1"
-              name="options"
-              id="binary"
-              checked={this.props.apiInterface.body.type === 'binary'}
-              onChange={e => this.selectTypeHandler(e)}
-            />
-            binary
-          </label> */}
         </div>
         <hr />
         {this.props.apiInterface.body.type === 'none' ? <NonePanel /> : ''}
@@ -89,7 +77,6 @@ class BodyPanel extends Component {
         ) : (
           ''
         )}
-        {/* {this.props.apiInterface.body.type === 'binary' ? <BinaryPanel /> : ''} */}
         <br />
       </div>
     );

@@ -7,7 +7,8 @@ class RawPanel extends Component {
         <textarea
           className="form-control"
           aria-label="With textarea"
-        ></textarea>
+          onChange={e => this.props.updateRawBody(e.target.value)}
+        >{this.props.apiInterface.body.raw}</textarea>
         <br />
       </div>
     );

@@ -13,6 +13,7 @@ import {
   SET_FORMDATA_ROWS_SELECTED,
   UPDATE_URLENCODED,
   SET_URLENCODED_ROWS_SELECTED,
+  UPDATE_RAWBODY,
 } from './types';
 
 /**
@@ -97,4 +98,9 @@ export const updateUrlEncoded = (fromRow, toRow, updated) => ({
 export const setUrlEncodedRowsSelected = selectedIndexes => ({
   type: SET_URLENCODED_ROWS_SELECTED,
   payload: selectedIndexes,
+});
+
+export const updateRawBody = data => ({
+  type: UPDATE_RAWBODY,
+  payload: data,
 });

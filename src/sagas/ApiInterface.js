@@ -25,6 +25,6 @@ function* sendRequest() {
     console.log(apiResponse);
     yield put({ type: API_RESPONSE_SUCCESS, payload: { apiResponse } });
   } catch (error) {
-    yield put({ type: API_RESPONSE_FAIL, payload: { error } });
+    yield put({ type: API_RESPONSE_FAIL, payload: { error: error.response } });
   }
 }

@@ -1,35 +1,83 @@
 import axios from 'axios';
+import qs from 'qs';
 
 export const doGetResponse = data => {
   return new Promise(function(resolve, reject) {
 
     // convert params : GET only
-    const apiParams = data.params;
     let finalParams = '';
-
-    for (let i=0; i < apiParams.selectedIndexes.length; i++) {
-      const paramItem = apiParams.rows[apiParams.selectedIndexes[i]];
-      if (paramItem.key !== '') {
-        if (i !== 0) {
-          finalParams += '&';  
+    if (data.method === 'GET') {
+      const apiParams = data.params;
+      let finalParams = '';
+  
+      for (let i=0; i < apiParams.selectedIndexes.length; i++) {
+        const paramItem = apiParams.rows[apiParams.selectedIndexes[i]];
+        if (paramItem.key !== '') {
+          if (finalParams !== '') {
+            finalParams += '&';  
+          }
+          finalParams += paramItem.key;
+          finalParams += '=';
+          finalParams += paramItem.value;
         }
-        finalParams += paramItem.key;
-        finalParams += '=';
-        finalParams += paramItem.value;
+      }
+    }
+    
+    // convert header :
+    const apiHeaders = data.headers;
+    let finalHeaders = {};
+    for (let i=0; i < apiHeaders.selectedIndexes.length; i++) {
+      const headerItem = apiHeaders.rows[apiHeaders.selectedIndexes[i]];
+      if (headerItem.key !== '') {
+        finalHeaders[headerItem.key] = headerItem.value;
       }
     }
 
-    console.log(finalParams);
+    // convert body :
+    let finalBody = {};
+    const apiBody = data.body;
+
+    if (apiBody.type === 'form-data') {
+      finalHeaders['Content-Type'] = 'multipart/form-data';
+
+      finalBody = new FormData();
+      for (let i=0; i < apiBody.formdata.selectedIndexes.length; i++) {
+        const bodyItem = apiBody.formdata.rows[apiBody.formdata.selectedIndexes[i]];
+        if (bodyItem.key !== '') {
+          finalBody.append(bodyItem.key, bodyItem.value);
+        }
+      }
+    }
+
+    if (apiBody.type === 'x-www-form-urlencoded') {
+      for (let i=0; i < apiBody.urlencoded.selectedIndexes.length; i++) {
+        const bodyItem = apiBody.urlencoded.rows[apiBody.urlencoded.selectedIndexes[i]];
+        if (bodyItem.key !== '') {
+          finalBody[bodyItem.key] = bodyItem.value;
+        }
+      }
+
+      finalBody = qs.stringify(finalBody);
+    }
+
+    if (apiBody.type === 'raw') {
+      finalHeaders['Content-Type'] = 'text/plain';
+      finalBody = apiBody.raw;
+    }
+
+    if (apiBody.type === 'none') {
+      finalBody = null;
+    }
+
+    console.log(finalBody)
     // convert body params : POST, PUT, 
     const config = {
       // `headers` are custom headers to be sent
-      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      headers: finalHeaders,
 
       // `params` are the URL parameters to be sent with the request
       // Must be a plain object or a URLSearchParams object
-      params: {
-        ID: 12345,
-      },
+      params: finalParams,
 
       // `timeout` specifies the number of milliseconds before the request times out.
       // If the request takes longer than `timeout`, the request will be aborted.
@@ -64,7 +112,7 @@ export const doGetResponse = data => {
 
     if (data.method === 'GET') {
       axios
-        .get(`${data.urlAddress}?${finalParams}`, finalParams, config)
+        .get(`${data.urlAddress}?${finalParams}`, null, config)
         .then(response => {
           resolve(response);
         })
@@ -73,7 +121,7 @@ export const doGetResponse = data => {
         });
     } else if (data.method === 'POST') {
       axios
-        .post(data.urlAddress, null, config)
+        .post(data.urlAddress, finalBody, config)
         .then(response => {
           resolve(response);
         })
@@ -82,7 +130,7 @@ export const doGetResponse = data => {
         });
     } else if (data.method === 'PUT') {
       axios
-        .put(data.urlAddress, null, config)
+        .put(data.urlAddress, finalBody, config)
         .then(response => {
           resolve(response);
         })

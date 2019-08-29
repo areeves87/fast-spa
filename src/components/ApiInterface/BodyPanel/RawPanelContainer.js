@@ -2,8 +2,7 @@ import { connect } from 'react-redux';
 import RawPanel from './RawPanel';
 // redux action
 import {
-  updateHeaders,
-  setHeadersRowsSelected,
+  updateRawBody,
 } from 'actions/ApiInterfaceAction';
 
 // map state to props
@@ -12,12 +11,9 @@ const mapStateToProps = ({ apiInterface }) => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    updateHeaders: (fromRow, toRow, updated) => {
-      dispatch(updateHeaders(fromRow, toRow, updated));
-    },
-    setHeadersRowsSelected: selectedIndexes => {
-      dispatch(setHeadersRowsSelected(selectedIndexes));
-    },
+    updateRawBody: data => {
+      dispatch(updateRawBody(data));
+    }
   };
 };
 
