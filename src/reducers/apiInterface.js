@@ -1,8 +1,8 @@
 import { handleActions } from 'redux-actions';
 
 const defaultState = {
-  method: 'POST',
-  urlAddress: 'https://reqres.in/api/login',
+  method: 'GET',
+  urlAddress: 'https://samplecsvs.s3.amazonaws.com/Sacramentorealestatetransactions.csv', // https://samplecsvs.s3.amazonaws.com/Sacramentorealestatetransactions.csv //https://reqres.in/api/login
   loading: false,
   params: {
     rows: [{ key: 'page', value: '20', description: '' }],
@@ -35,6 +35,11 @@ const defaultState = {
     code: '',
     data: '',
   },
+  csv: {
+    columns : [],
+    rows: [],
+    rowCount: 0
+  }
 };
 
 export default handleActions(
@@ -47,6 +52,11 @@ export default handleActions(
           code: '',
           data: '',
         },
+        csv: {
+          columns : [],
+          rows: [],
+          rowCount: 0
+        }
       }
     },
 
@@ -63,6 +73,22 @@ export default handleActions(
         ...state,
         loading: false,
         response: error,
+      };
+    },
+
+    CSV_RESPONSE_SUCCESS: (state, { payload: { csvResponse } }) => {
+      return {
+        ...state,
+        loading: false,
+        csv: csvResponse,
+      };
+    },
+
+    CSV_RESPONSE_FAIL: (state, { payload: { error } }) => {
+      return {
+        ...state,
+        loading: false,
+        csv: error,
       };
     },
 

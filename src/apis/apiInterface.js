@@ -4,23 +4,28 @@ import qs from 'qs';
 export const doGetResponse = data => {
   return new Promise(function(resolve, reject) {
 
+    let responseType = 'json';
     // convert params : GET only
     let finalParams = '';
     if (data.method === 'GET') {
       const apiParams = data.params;
-      let finalParams = '';
-  
       for (let i=0; i < apiParams.selectedIndexes.length; i++) {
         const paramItem = apiParams.rows[apiParams.selectedIndexes[i]];
         if (paramItem.key !== '') {
           if (finalParams !== '') {
             finalParams += '&';  
+          } else {
+            finalParams += '?';
           }
           finalParams += paramItem.key;
           finalParams += '=';
           finalParams += paramItem.value;
         }
       }
+    }
+
+    if (data.method === 'GET' && data.urlAddress.includes('.csv')) {
+      responseType = 'blob';
     }
     
     // convert header :
@@ -69,19 +74,24 @@ export const doGetResponse = data => {
       finalBody = null;
     }
 
+    console.log(finalParams)
     console.log(finalBody)
     // convert body params : POST, PUT, 
     const config = {
+
+      url: `${data.urlAddress}${finalParams}`,
+
+      method: data.method,
       // `headers` are custom headers to be sent
       headers: finalHeaders,
 
       // `params` are the URL parameters to be sent with the request
       // Must be a plain object or a URLSearchParams object
-      params: finalParams,
+      data: finalBody,
 
       // `timeout` specifies the number of milliseconds before the request times out.
       // If the request takes longer than `timeout`, the request will be aborted.
-      timeout: 3000, // default is `0` (no timeout)
+      timeout: 30000, // default is `0` (no timeout)
 
       // `withCredentials` indicates whether or not cross-site Access-Control requests
       // should be made using credentials
@@ -100,52 +110,62 @@ export const doGetResponse = data => {
       // `responseType` indicates the type of data that the server will respond with
       // options are: 'arraybuffer', 'document', 'json', 'text', 'stream'
       //   browser only: 'blob'
-      responseType: 'json', // default
+      responseType: responseType, // default
 
       // `responseEncoding` indicates encoding to use for decoding responses
       // Note: Ignored for `responseType` of 'stream' or client-side requests
-      responseEncoding: 'utf8', // default
+      responseEncoding: 'json', // default
 
       // `maxContentLength` defines the max size of the http response content in bytes allowed
-      maxContentLength: 2000,
+      maxContentLength: 100000,
     };
 
-    if (data.method === 'GET') {
-      axios
-        .get(`${data.urlAddress}?${finalParams}`, null, config)
-        .then(response => {
-          resolve(response);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    } else if (data.method === 'POST') {
-      axios
-        .post(data.urlAddress, finalBody, config)
-        .then(response => {
-          resolve(response);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    } else if (data.method === 'PUT') {
-      axios
-        .put(data.urlAddress, finalBody, config)
-        .then(response => {
-          resolve(response);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    } else if (data.method === 'DELETE') {
-      axios
-        .delete(data.urlAddress, null, config)
-        .then(response => {
-          resolve(response);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    }
+    axios
+      .request(config)
+      .then(response => {
+        resolve(response);
+      })
+      .catch(err => {
+        console.log('error reject')
+        reject(err);
+      });
+
+    // if (data.method === 'GET') {
+    //   axios
+    //     .get(`${data.urlAddress}?${finalParams}`, null, config)
+    //     .then(response => {
+    //       resolve(response);
+    //     })
+    //     .catch(err => {
+    //       reject(err);
+    //     });
+    // } else if (data.method === 'POST') {
+    //   axios
+    //     .post(data.urlAddress, finalBody, config)
+    //     .then(response => {
+    //       resolve(response);
+    //     })
+    //     .catch(err => {
+    //       reject(err);
+    //     });
+    // } else if (data.method === 'PUT') {
+    //   axios
+    //     .put(data.urlAddress, finalBody, config)
+    //     .then(response => {
+    //       resolve(response);
+    //     })
+    //     .catch(err => {
+    //       reject(err);
+    //     });
+    // } else if (data.method === 'DELETE') {
+    //   axios
+    //     .delete(data.urlAddress, null, config)
+    //     .then(response => {
+    //       resolve(response);
+    //     })
+    //     .catch(err => {
+    //       reject(err);
+    //     });
+    // }
   });
 };

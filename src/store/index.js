@@ -11,12 +11,16 @@ const sagaMiddleware = createSagaMiddleware();
 
 const middlewares = [sagaMiddleware];
 
+let appStore = null;
+
 export function configureStore(initialState) {
   const store = createStore(
     reducers,
     initialState,
     compose(composeWithDevTools(applyMiddleware(...middlewares)))
   );
+
+  appStore = store;
 
   sagaMiddleware.run(RootSaga);
 
@@ -29,4 +33,8 @@ export function configureStore(initialState) {
   }
 
   return store;
+}
+
+export function getStore() {
+  return appStore;
 }
