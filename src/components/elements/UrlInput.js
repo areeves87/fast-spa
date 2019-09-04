@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import { Dropdown } from 'react-bootstrap';
+import swaggerData from 'swagger.json';
 
 class UrlInput extends Component {
+
+  componentDidMount() {
+    this.setState({swaggerData : swaggerData})
+    console.log(Object.keys(swaggerData.paths))
+  }
   state = {
     selectedMethod: 'GET',
   };
@@ -12,6 +18,13 @@ class UrlInput extends Component {
   sendHandler = e => {
     this.props.sendRequest();
   };
+
+  selectedAPIHandler = e => {
+    const item = e.target.value.split('.')[0];
+    const subItem = e.target.value.split('.')[1];
+    this.props.selectAPI(item, subItem, swaggerData.paths[item][subItem])
+  };
+
   render() {
     return (
       <div className="input-group mb-3">
@@ -31,13 +44,25 @@ class UrlInput extends Component {
             </Dropdown.Menu>
           </Dropdown>
         </div>
-        <input
+        <div class="select-editable form-control">
+    <select onChange={e=>this.selectedAPIHandler(e)}>
+        { Object.keys(swaggerData.paths).map(item => (
+          
+          Object.keys(swaggerData.paths[item]).map(subItem => (
+            <option value={item + '.' + subItem}>[{subItem}]&nbsp;{item}</option>
+          ))
+        ))}
+        
+    </select>
+    <input
           type="text"
           className="form-control"
           aria-label="Text input with dropdown button"
           value={this.props.apiInterface.urlAddress}
           onChange={e => this.props.setUrlAddress(e.target.value)}
         />
+</div>
+        
         <div className="input-group-append">
           <button
             className="btn btn-primary"

@@ -14,6 +14,7 @@ import {
   UPDATE_URLENCODED,
   SET_URLENCODED_ROWS_SELECTED,
   UPDATE_RAWBODY,
+  SELECT_API,
 } from './types';
 
 /**
@@ -28,6 +29,14 @@ export const updateMethod = method => ({
 export const setUrlAddress = urlAddress => ({
   type: SET_URLADDRESS,
   payload: urlAddress,
+});
+
+/**
+ * 
+ */
+export const selectAPI = (item, subItem, data) => ({
+  type: SELECT_API,
+  payload: { item, subItem, data },
 });
 
 /**

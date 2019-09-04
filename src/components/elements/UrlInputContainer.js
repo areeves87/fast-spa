@@ -5,6 +5,7 @@ import {
   updateMethod,
   setUrlAddress,
   sendRequest,
+  selectAPI,
 } from 'actions/ApiInterfaceAction';
 
 // map state to props
@@ -21,6 +22,9 @@ const mapDispatchToProps = dispatch => {
     },
     sendRequest: () => {
       dispatch(sendRequest());
+    },
+    selectAPI: (item, subItem, data) => {
+      dispatch(selectAPI(item, subItem, data));
     },
   };
 };

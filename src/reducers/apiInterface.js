@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions';
+import swaggerData from 'swagger.json';
 
 const defaultState = {
   method: 'GET',
@@ -10,7 +11,7 @@ const defaultState = {
     selectedIndexes: [0],
   },
   headers: {
-    rows: [{ key: 'Content-Type', value: 'application/x-www-form-urlencoded', description: '' }],
+    rows: [{ key: 'Content-Type', value: 'application/json', description: '' }],
     rowCount: 1,
     selectedIndexes: [0],
   },
@@ -57,6 +58,34 @@ export default handleActions(
           rows: [],
           rowCount: 0
         }
+      }
+    },
+
+    SELECT_API: (state, { payload: { item, subItem, data } }) => {
+      const method = subItem.toUpperCase();
+      const urlAddress = `${swaggerData.schemes[0]}://${swaggerData.host}${swaggerData.basePath}${item}`;
+
+      //configure header
+      let rows = [];
+      if (data.consumes) {
+        rows = data.consumes.map(item => (
+          { key: 'Content-Type', value: item, description: '' }
+        ))
+      }
+      
+      const headers = {      
+        rows: rows,
+        rowCount: rows.length,
+        selectedIndexes: [0],
+      };
+
+      //configure parameters
+
+      return {
+        ...state,
+        method,
+        urlAddress,
+        headers,
       }
     },
 
