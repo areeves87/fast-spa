@@ -5667,3 +5667,19 @@ a.text-dark:hover, a.text-dark:focus {
 
 .select-editable select:focus, .select-editable input:focus {
   outline: none; }
+
+.fscard {
+  flex: 1 0 320px;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 0 4px 0 #BDBDBD; }
+  .fscard img {
+    vertical-align: middle;
+    border-style: none;
+    object-fit: cover;
+    width: 100%; }
+
+.fscard-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }

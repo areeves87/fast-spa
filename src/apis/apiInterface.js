@@ -3,17 +3,16 @@ import qs from 'qs';
 
 export const doGetResponse = data => {
   return new Promise(function(resolve, reject) {
-
     let responseType = 'json';
     // convert params : GET only
     let finalParams = '';
     if (data.method === 'GET') {
       const apiParams = data.params;
-      for (let i=0; i < apiParams.selectedIndexes.length; i++) {
+      for (let i = 0; i < apiParams.selectedIndexes.length; i++) {
         const paramItem = apiParams.rows[apiParams.selectedIndexes[i]];
         if (paramItem.key !== '') {
           if (finalParams !== '') {
-            finalParams += '&';  
+            finalParams += '&';
           } else {
             finalParams += '?';
           }
@@ -27,11 +26,11 @@ export const doGetResponse = data => {
     if (data.method === 'GET' && data.urlAddress.includes('.csv')) {
       responseType = 'blob';
     }
-    
+
     // convert header :
     const apiHeaders = data.headers;
-    let finalHeaders = {};
-    for (let i=0; i < apiHeaders.selectedIndexes.length; i++) {
+    const finalHeaders = {};
+    for (let i = 0; i < apiHeaders.selectedIndexes.length; i++) {
       const headerItem = apiHeaders.rows[apiHeaders.selectedIndexes[i]];
       if (headerItem.key !== '') {
         finalHeaders[headerItem.key] = headerItem.value;
@@ -46,8 +45,9 @@ export const doGetResponse = data => {
       finalHeaders['Content-Type'] = 'multipart/form-data';
 
       finalBody = new FormData();
-      for (let i=0; i < apiBody.formdata.selectedIndexes.length; i++) {
-        const bodyItem = apiBody.formdata.rows[apiBody.formdata.selectedIndexes[i]];
+      for (let i = 0; i < apiBody.formdata.selectedIndexes.length; i++) {
+        const bodyItem =
+          apiBody.formdata.rows[apiBody.formdata.selectedIndexes[i]];
         if (bodyItem.key !== '') {
           finalBody.append(bodyItem.key, bodyItem.value);
         }
@@ -55,8 +55,9 @@ export const doGetResponse = data => {
     }
 
     if (apiBody.type === 'x-www-form-urlencoded') {
-      for (let i=0; i < apiBody.urlencoded.selectedIndexes.length; i++) {
-        const bodyItem = apiBody.urlencoded.rows[apiBody.urlencoded.selectedIndexes[i]];
+      for (let i = 0; i < apiBody.urlencoded.selectedIndexes.length; i++) {
+        const bodyItem =
+          apiBody.urlencoded.rows[apiBody.urlencoded.selectedIndexes[i]];
         if (bodyItem.key !== '') {
           finalBody[bodyItem.key] = bodyItem.value;
         }
@@ -74,11 +75,10 @@ export const doGetResponse = data => {
       finalBody = null;
     }
 
-    console.log(finalParams)
-    console.log(finalBody)
-    // convert body params : POST, PUT, 
+    console.log(finalParams);
+    console.log(finalBody);
+    // convert body params : POST, PUT,
     const config = {
-
       url: `${data.urlAddress}${finalParams}`,
 
       method: data.method,
@@ -126,7 +126,7 @@ export const doGetResponse = data => {
         resolve(response);
       })
       .catch(err => {
-        console.log('error reject')
+        console.log('error reject');
         reject(err);
       });
 

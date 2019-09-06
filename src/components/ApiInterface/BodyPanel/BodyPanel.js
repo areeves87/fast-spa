@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import NonePanel from './NonePanel';
-import FormDataPanelContainer from './FormDataPanelContainer';
-import RawPanelContainer from './RawPanelContainer';
-import UrlEncodedPanelContainer from './UrlEncodedPanelContainer';
+import FormDataPanel from './FormDataPanel';
+import RawPanel from './RawPanel';
+import UrlEncodedPanel from './UrlEncodedPanel';
 
 class BodyPanel extends Component {
   selectTypeHandler = e => {
@@ -63,17 +63,28 @@ class BodyPanel extends Component {
         <hr />
         {this.props.apiInterface.body.type === 'none' ? <NonePanel /> : ''}
         {this.props.apiInterface.body.type === 'form-data' ? (
-          <FormDataPanelContainer />
+          <FormDataPanel 
+            apiInterface={this.props.apiInterface}
+            updateFormData={this.props.updateFormData}
+            setFormDataRowsSelected={this.props.setFormDataRowsSelected}
+          />
         ) : (
           ''
         )}
         {this.props.apiInterface.body.type === 'x-www-form-urlencoded' ? (
-          <UrlEncodedPanelContainer />
+          <UrlEncodedPanel
+            apiInterface={this.props.apiInterface}
+            updateUrlEncoded={this.props.updateUrlEncoded}
+            setUrlEncodedRowsSelected={this.props.setUrlEncodedRowsSelected}
+          />
         ) : (
           ''
         )}
         {this.props.apiInterface.body.type === 'raw' ? (
-          <RawPanelContainer />
+          <RawPanel
+            apiInterface={this.props.apiInterface}
+            updateRawBody={this.props.updateRawBody}
+          />
         ) : (
           ''
         )}

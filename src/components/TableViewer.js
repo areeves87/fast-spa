@@ -3,10 +3,10 @@ import ReactDataGrid from 'react-data-grid';
 
 class TableViewer extends Component {
   render() {
-      const {columns, rows } = this.props;
+    const { columns, rows } = this.props;
 
     return (
-        <ReactDataGrid
+      <ReactDataGrid
         columns={columns}
         rowGetter={i => rows[i]}
         rowsCount={rows.length}

@@ -16,5 +16,6 @@ export const actions = {
   onArchiveTask: action('onArchiveTask'),
 };
 
-storiesOf('Header', module)
-  .add('default', () => <Header task={task} {...actions} />)
+storiesOf('Header', module).add('default', () => (
+  <Header task={task} {...actions} />
+));

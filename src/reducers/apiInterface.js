@@ -3,7 +3,8 @@ import swaggerData from 'swagger.json';
 
 const defaultState = {
   method: 'GET',
-  urlAddress: 'https://samplecsvs.s3.amazonaws.com/Sacramentorealestatetransactions.csv', // https://samplecsvs.s3.amazonaws.com/Sacramentorealestatetransactions.csv //https://reqres.in/api/login
+  urlAddress:
+    'https://samplecsvs.s3.amazonaws.com/Sacramentorealestatetransactions.csv', // https://samplecsvs.s3.amazonaws.com/Sacramentorealestatetransactions.csv //https://reqres.in/api/login
   loading: false,
   params: {
     rows: [{ key: 'page', value: '20', description: '' }],
@@ -17,15 +18,20 @@ const defaultState = {
   },
   body: {
     type: 'x-www-form-urlencoded',
-    formdata: {///"email": "eve.holt@reqres.in",
-      rows: [{ key: 'email', value: 'eve.holt@reqres.in', description: '' },
-      { key: 'password', value: 'cityslicka', description: '' }],
+    formdata: {
+      ///"email": "eve.holt@reqres.in",
+      rows: [
+        { key: 'email', value: 'eve.holt@reqres.in', description: '' },
+        { key: 'password', value: 'cityslicka', description: '' },
+      ],
       rowCount: 2,
       selectedIndexes: [0, 1],
     },
     urlencoded: {
-      rows: [{ key: 'email', value: 'eve.holt@reqres.in', description: '' },
-      { key: 'password', value: 'cityslicka', description: '' }],
+      rows: [
+        { key: 'email', value: 'eve.holt@reqres.in', description: '' },
+        { key: 'password', value: 'cityslicka', description: '' },
+      ],
       rowCount: 2,
       selectedIndexes: [0, 1],
     },
@@ -37,10 +43,10 @@ const defaultState = {
     data: '',
   },
   csv: {
-    columns : [],
+    columns: [],
     rows: [],
-    rowCount: 0
-  }
+    rowCount: 0,
+  },
 };
 
 export default handleActions(
@@ -49,31 +55,35 @@ export default handleActions(
       return {
         ...state,
         loading: true,
-        response:{
+        response: {
           code: '',
           data: '',
         },
         csv: {
-          columns : [],
+          columns: [],
           rows: [],
-          rowCount: 0
-        }
-      }
+          rowCount: 0,
+        },
+      };
     },
 
     SELECT_API: (state, { payload: { item, subItem, data } }) => {
       const method = subItem.toUpperCase();
-      const urlAddress = `${swaggerData.schemes[0]}://${swaggerData.host}${swaggerData.basePath}${item}`;
+      const urlAddress = `${swaggerData.schemes[0]}://${swaggerData.host}${
+        swaggerData.basePath
+      }${item}`;
 
       //configure header
       let rows = [];
       if (data.consumes) {
-        rows = data.consumes.map(item => (
-          { key: 'Content-Type', value: item, description: '' }
-        ))
+        rows = data.consumes.map(item => ({
+          key: 'Content-Type',
+          value: item,
+          description: '',
+        }));
       }
-      
-      const headers = {      
+
+      const headers = {
         rows: rows,
         rowCount: rows.length,
         selectedIndexes: [0],
@@ -86,7 +96,7 @@ export default handleActions(
         method,
         urlAddress,
         headers,
-      }
+      };
     },
 
     API_RESPONSE_SUCCESS: (state, { payload: { apiResponse } }) => {
@@ -148,7 +158,7 @@ export default handleActions(
     },
 
     SET_PARAMS_ROWS_SELECTED: (state, { payload: selectedIndexes }) => {
-      let unique = [...new Set(selectedIndexes)];
+      const unique = [...new Set(selectedIndexes)];
       const params = state.params;
       params.selectedIndexes = unique;
       return {
@@ -171,7 +181,7 @@ export default handleActions(
       if (fromRow === params.rowCount - 1) {
         rowCount++;
         rows[fromRow + 1] = { key: '', value: '', description: '' };
-        params.selectedIndexes.push(fromRow)
+        params.selectedIndexes.push(fromRow);
       }
 
       params.rows = rows;
@@ -185,7 +195,7 @@ export default handleActions(
     },
 
     SET_HEADERS_ROWS_SELECTED: (state, { payload: selectedIndexes }) => {
-      let unique = [...new Set(selectedIndexes)];
+      const unique = [...new Set(selectedIndexes)];
       const headers = state.headers;
       headers.selectedIndexes = unique;
       return {
@@ -223,7 +233,7 @@ export default handleActions(
 
     //////////////////////
     SET_FORMDATA_ROWS_SELECTED: (state, { payload: selectedIndexes }) => {
-      let unique = [...new Set(selectedIndexes)];
+      const unique = [...new Set(selectedIndexes)];
       const body = state.body;
       body.formdata.selectedIndexes = unique;
       return {
@@ -260,7 +270,7 @@ export default handleActions(
     },
     //////////////////////
     SET_URLENCODED_ROWS_SELECTED: (state, { payload: selectedIndexes }) => {
-      let unique = [...new Set(selectedIndexes)];
+      const unique = [...new Set(selectedIndexes)];
       const body = state.body;
       body.urlencoded.selectedIndexes = unique;
       return {

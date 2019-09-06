@@ -1,62 +1,29 @@
-import React from 'react'
-import { storiesOf } from '@storybook/react'
-import Provider from '../Provider.js'
-import { configureStore } from '../store';
-import { Router, Route, Switch } from 'react-router-dom';
-import { browserHistory } from 'react-router';
+import React from 'react';
+import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
+import { withKnobs, text } from '@storybook/addon-knobs';
 import UrlInput from 'components/elements/UrlInput';
-
-// const withProvider = (story) => (
-//   <Provider store={configureStore(browserHistory)}>
-//     {story()}
-//   </Provider>
-// )
 
 const defaultState = {
   method: 'GET',
-  urlAddress: 'https://samplecsvs.s3.amazonaws.com/Sacramentorealestatetransactions.csv', // https://samplecsvs.s3.amazonaws.com/Sacramentorealestatetransactions.csv //https://reqres.in/api/login
-  loading: false,
-  params: {
-    rows: [{ key: 'page', value: '20', description: '' }],
-    rowCount: 1,
-    selectedIndexes: [0],
-  },
-  headers: {
-    rows: [{ key: 'Content-Type', value: 'application/json', description: '' }],
-    rowCount: 1,
-    selectedIndexes: [0],
-  },
-  body: {
-    type: 'x-www-form-urlencoded',
-    formdata: {///"email": "eve.holt@reqres.in",
-      rows: [{ key: 'email', value: 'eve.holt@reqres.in', description: '' },
-      { key: 'password', value: 'cityslicka', description: '' }],
-      rowCount: 2,
-      selectedIndexes: [0, 1],
-    },
-    urlencoded: {
-      rows: [{ key: 'email', value: 'eve.holt@reqres.in', description: '' },
-      { key: 'password', value: 'cityslicka', description: '' }],
-      rowCount: 2,
-      selectedIndexes: [0, 1],
-    },
-    raw: '',
-    binary: null,
-  },
-  response: {
-    code: '',
-    data: '',
-  },
-  csv: {
-    columns : [],
-    rows: [],
-    rowCount: 0
-  }
+  urlAddress: 'https://reqres.in/api/login', // https://samplecsvs.s3.amazonaws.com/Sacramentorealestatetransactions.csv //https://reqres.in/api/login
 };
 
-
 storiesOf('ApiInterface', module)
-  // .addDecorator(withProvider)
-  .add('UrlInput', () => (
-    <UrlInput apiInterface={defaultState}/>
+  .addDecorator(withKnobs)
+  .add('UrlInput', () => <UrlInput apiInterface={defaultState} />)
+  .add('sendAction', () => (
+    <UrlInput
+      apiInterface={defaultState}
+      sendRequest={action('sendRequest')}
+      updateMethod={action('updateMethod')}
+      selectAPI={action('selectAPI')}
+    />
   ))
+  .add('knobs', () => {
+    const defaultState = {
+      method: text('method', 'GET'),
+      urlAddress: text('url', 'https://reqres.in/api/login'), // https://samplecsvs.s3.amazonaws.com/Sacramentorealestatetransactions.csv //https://reqres.in/api/login
+    };
+    return <UrlInput apiInterface={defaultState} />;
+  });

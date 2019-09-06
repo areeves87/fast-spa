@@ -32,7 +32,7 @@ export const setUrlAddress = urlAddress => ({
 });
 
 /**
- * 
+ *
  */
 export const selectAPI = (item, subItem, data) => ({
   type: SELECT_API,

@@ -12,7 +12,7 @@ import {
 
 import { doGetResponse } from 'apis/apiInterface';
 import fileReader from 'utils/fileReader';
-import Papa from "papaparse";
+import Papa from 'papaparse';
 import { getStore } from '../store';
 
 export const getApiInterface = state => state.apiInterface;
@@ -24,43 +24,51 @@ export default function* rootSaga() {
 }
 
 const handleDataChange = file => {
-  console.log(JSON.stringify(file))
-  let csvResponse = {};
+  console.log(JSON.stringify(file));
+  const csvResponse = {};
   csvResponse.rows = file.data;
 
   csvResponse.columns = file.meta.fields.map(item => {
-    return { key: item, name: item, editable: false, resizable: true}
+    return { key: item, name: item, editable: false, resizable: true };
   });
   csvResponse.rowCount = file.data.length;
 
-  getStore().dispatch({ type: CSV_RESPONSE_SUCCESS, payload: { csvResponse } })
-  
+  getStore().dispatch({ type: CSV_RESPONSE_SUCCESS, payload: { csvResponse } });
 };
-
 
 function* sendRequest() {
   try {
     const apiInterface = yield select(getApiInterface);
     const apiResponse = yield call(doGetResponse, apiInterface);
     if (apiResponse.request.responseType === 'blob') {
-      const file = yield call(fileReader, apiResponse.data);
-      
-      Papa.parse(file, {
-        header: true,
-        dynamicTyping: true,
-        complete: handleDataChange
-      });
+      try {
+        const file = yield call(fileReader, apiResponse.data);
+
+        Papa.parse(file, {
+          header: true,
+          dynamicTyping: true,
+          complete: handleDataChange,
+        });
+      } catch (error) {
+        yield put({
+          type: CSV_RESPONSE_FAIL,
+          payload: { error: { data: error } },
+        });
+      }
     } else {
       yield put({ type: API_RESPONSE_SUCCESS, payload: { apiResponse } });
     }
-    
-    
   } catch (error) {
     if (error.response) {
-      yield put({ type: API_RESPONSE_FAIL, payload: { error: error.response } });
+      yield put({
+        type: API_RESPONSE_FAIL,
+        payload: { error: error.response },
+      });
     } else {
-      yield put({ type: API_RESPONSE_FAIL, payload: { error: { data: error } } });
+      yield put({
+        type: API_RESPONSE_FAIL,
+        payload: { error: { data: error } },
+      });
     }
-    
   }
 }
