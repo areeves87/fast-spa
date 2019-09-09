@@ -6,17 +6,11 @@ import createSagaMiddleware from 'redux-saga';
 import reducers from '../reducers';
 import RootSaga from '../sagas';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import createStorybookListener from 'storybook-addon-redux-listener';
 
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
 
 const middlewares = [sagaMiddleware];
-
-if (process.env.NODE_ENV === 'storybook') {
-  const reduxListener = createStorybookListener();
-  middlewares.push(reduxListener);
-}
 
 let appStore = null;
 
