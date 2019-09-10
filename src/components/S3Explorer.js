@@ -3,6 +3,42 @@ import axios from 'axios';
 import XMLParser from 'react-xml-parser';
 import styled from 'styled-components'
 
+/*
+
+1. Block all public access - off
+
+2. Bucket Policy
+
+{
+    "Version": "2008-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowPublicRead",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "*"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::xy883/*"
+        }
+    ]
+}
+
+3. CORS configuration
+
+<?xml version="1.0" encoding="UTF-8"?>
+<CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+<CORSRule>
+    <AllowedOrigin>*</AllowedOrigin>
+    <AllowedMethod>GET</AllowedMethod>
+    <AllowedHeader>*</AllowedHeader>
+</CORSRule>
+</CORSConfiguration>
+
+4. Public access - List objects, Read bucket permissions
+*/
+
+
 const H3 = styled.h3`
   color: black;
   cursor: pointer;
